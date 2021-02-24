@@ -34,7 +34,7 @@ FUNCTION	brem_nontherm, eel, n_e, eph, n_0, vol, stop=stop
 		brm_bremcross, eel, photon_energy+fltarr(n_elements(eel)), z, cross
 		cross = cross/mc2         ; The cross section calculated by brm_bremcross is normalized and 
 		                          ; in units of cm^2. To get a cross section in cm^2/keV, we need to
-		                          ; to divide it by mc2(eletron rest energy).
+		                          ; divide it by mc2(eletron rest energy).
 		
 		ind = where(eel ge photon_energy and finite(cross))
 		integral = tsum( eel[ind], cross[ind]*v[ind]*n_e[ind] )    ; use trapezoidal rule for integration
