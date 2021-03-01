@@ -21,7 +21,7 @@ vol = (1.d8)^3				; test volume (chosen)
 gamma = eel/511+1			; relativistic gamma (kinetic E / rest E + 1)
 c = 3.e10					; speed of light in cm/s
 v = c*sqrt(1-1./gamma^2)	; relativistic velocity
-z = 1						; avg atomic number of targets
+z = 1.2				        ; avg atomic number of targets
 
 .run
 for i=1, n_elements(eph)-1 do begin
@@ -33,7 +33,9 @@ for i=1, n_elements(eph)-1 do begin
 
 	brm_bremcross, eel, photon_energy+fltarr(n_elements(eel)), z, cross
 	ind = where(eel ge photon_energy and finite(cross))
-	integral = int_tabulated( eel[ind], cross[ind]*v[ind]*n_e[ind] )
+	integral = tsum( eel[ind], cross[ind]/511*v[ind]*n_e[ind] )  ;use trapezoidal rule for integration
+	         ; The cross section calculated by brm_bremcross is normalized and in units of cm^2. 
+	         ; To get a cross section in cm^2/keV, we need to divide it by mc2(eletron rest energy).
 	flux[i] = 1./(4*!pi*r^2) * n_0 * integral * vol
 endfor
 end
@@ -54,14 +56,14 @@ nbin = fix((alog(emax)-alog(emin))/bin)
 eel = findgen(nbin+1)*bin + alog(emin)
 eel = get_edges( exp(eel), /mean)
 n_0 = 1.e10						; Ambient density
-delta = 3						; Electron spectral index
-n_e = 1.e5*eel^(-delta)			; Electron distribution in 
+delta = 3.						; Electron spectral index
+n_e = 1.e5*eel^(-delta)			; Electron density distribution, single power law
+gamma = eel/510.98d00+1     ; relativistic gamma (kinetic E / rest E + 1)
+c = 3e10         ; speed of light in cm/s
+v = c*sqrt(1-1./gamma^2)
 
-; Total number density of nonthermal electrons (n_e integrated over energy)
-;;; THIS IS WHERE A PROBLEM IS!!!  INT_TABULATE DOES NOT BEHAVE CONSISTENTLY 
-;;; FOR DIFFERENT ENERGY BIN SIZES.  Probably fix by using a more mature integration 
-;;; method.  Use it within the routine too.
-n_e_tot = int_tabulated( eel, n_e )
+; Total flux density of nonthermal electrons (n_e*v integrated over energy)
+el_f_tot = tsum( eel, n_e*v )
 vol = (1.d8)^3
 
 flux = brem_nontherm( eel, n_e, eph, n_0, vol );, /stop )
@@ -69,8 +71,12 @@ flux = brem_nontherm( eel, n_e, eph, n_0, vol );, /stop )
 ; Here's the RHESSI power-law thin-target calculation for comparison:
 ;;;brm2_distrn, eel, delta, delta, min(eel), 20., max(eel), fcn	; Normalized to integrate to 1.
 ;;;fcn *= int_tabulated(eel,n_e)
-a0 = n_0*n_e_tot*vol
-flux_compare = a0*brm2_thintarget( eph, [1.,delta,1.e5,delta,0.1,1.e5] )
+a0 = n_0*el_f_tot*vol
+flux_compare = a0*brm2_thintarget( eph, [1.,delta-0.5,1.e5,delta-0.5,0.1,1e4] )
+        ; Brm2_ThinTarget uses electron FLUX density distribution, so the spectral indices 
+	; to be put in here is different from the spectral indices for our electron density
+	; distribution. The relation is delta_f=delta-0.5 for sub-relativistic cases.
+
 loadct, 0
 hsi_linecolors
 popen, 'brem_test', xsi=7, ysi=5
@@ -85,8 +91,8 @@ spawn, 'open brem_test.ps'
 print, alog10(flux[10]/flux[99])
 print, median( flux_compare / flux )
 print, median( flux / flux_compare )
-plot, flux_compare / flux
-print, n_e_tot
+plot, flux_compare / flux, /xlog, /ylog, xrange=[1.,100], yrange=[0.1,10]
+;print, n_e_tot
 
 ;;; scratch work, just reminding myself of some conversions.
 v = findgen(1000)/1000.*1.e11

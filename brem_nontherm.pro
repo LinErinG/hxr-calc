@@ -16,13 +16,13 @@ FUNCTION	brem_nontherm, eel, n_e, eph, n_0, vol, stop=stop
 	gamma = eel/511+1			; relativistic gamma
 	c = 3.e10					; speed of light
 	v = c*sqrt(1-1./gamma^2)	; relativistic velocity
-	z = 1						; avg atomic number of targets
+	z = 1.2						; avg atomic number of targets
 	mc2 = 510.98d+00
 	
 	if keyword_set( STOP ) then stop
 	
 	; Total number density of nonthermal electrons (n_e integrated over energy)
-	n_e_tot = int_tabulated( eel, n_e )
+	;n_e_tot = tsum( eel, n_e )
 
 	for i=1, n_elements(eph)-1 do begin
 		photon_energy = eph[i]
@@ -32,8 +32,12 @@ FUNCTION	brem_nontherm, eel, n_e, eph, n_0, vol, stop=stop
 		; energies go past 1 MeV.
 	
 		brm_bremcross, eel, photon_energy+fltarr(n_elements(eel)), z, cross
+		cross = cross/mc2         ; The cross section calculated by brm_bremcross is normalized and 
+		                          ; in units of cm^2. To get a cross section in cm^2/keV, we need to
+		                          ; divide it by mc2(eletron rest energy).
+		
 		ind = where(eel ge photon_energy and finite(cross))
-		integral = int_tabulated( eel[ind], cross[ind]*v[ind]*n_e[ind] )
+		integral = tsum( eel[ind], cross[ind]*v[ind]*n_e[ind] )    ; use trapezoidal rule for integration
 		;; Removed the factor of v - this is assuming the input is electron flux density.
 		;integral = int_tabulated( eel[ind], cross[ind]*n_e[ind] )
 		flux[i] = 1./(4*!pi*r^2) * n_0 * integral * vol;;; * n_e_tot
