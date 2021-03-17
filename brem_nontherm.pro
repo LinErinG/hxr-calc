@@ -3,7 +3,7 @@ FUNCTION	brem_nontherm, eel, n_e, eph, n_0, vol
 	; PURPOSE:
 	; Calculate the thin-target bremsstrahlung emission from an arbitrary electron distribution
 	; 
-	; DISCRIPTION:
+	; DESCRIPTION:
 	; The general equation for bremsstrahlung calculation is:
 	; I = 1./(4*pi*r^2) * n_0 * integral[ cross_section * v * n_e ] 
 	; (integrated from photon energy to infinity).
@@ -44,7 +44,7 @@ FUNCTION	brem_nontherm, eel, n_e, eph, n_0, vol
 		brm_bremcross, eel, photon_energy+fltarr(n_elements(eel)), z, cross
 		cross = cross/mc2         ; The cross section calculated by brm_bremcross is normalized and 
 		                          ; in units of cm^2. To get a cross section in cm^2/keV, we need to
-		                          ; divide it by mc2(eletron rest energy).			  
+		                          ; divide it by mc2(electron rest energy).			  
 		ind = where(eel ge photon_energy and finite(cross))
 		integral = tsum( eel[ind], cross[ind]*v[ind]*n_e[ind] )    ; use trapezoidal rule for integration
 			; Note: Lower limit on integration is the photon energy. Upper limit is top of EEL array. 
