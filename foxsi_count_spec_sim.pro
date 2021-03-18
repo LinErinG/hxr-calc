@@ -19,8 +19,8 @@ Pro foxsi_count_spec_sim, eph, photon_flux, int_time=int_time, counting_stat=cou
   Default, foxsi_spacecraft, 0
   
   ; Read effective area
-  If foxsi_spacecraft eq 0 then file = 'foxsi4_eff_area_10shell_cdte_al380.csv' $
-    Else file = 'foxsi_spacecraft_effective_area_per_module.csv'
+  If foxsi_spacecraft eq 0 then file = 'foxsi_effarea_data/foxsi4_eff_area_10shell_cdte_al380.csv' $
+    Else file = 'foxsi_effarea_data/foxsi_spacecraft_effective_area_per_module.csv'
   data = read_csv(file)
   energy = data.field1   ;keV
   eff_area = data.field2    ;cm2
