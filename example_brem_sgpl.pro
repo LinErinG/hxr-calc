@@ -1,7 +1,16 @@
-Pro example_brem_sgpl
+Pro example_brem_sgpl, photon_spec
     
     ; Example script to use brem_nontherm.pro for bremsstrahlung calculation: 
-    ; calculate x-ray spectrum from a single-power-law electron distribution   
+    ; calculate x-ray spectrum from a single-power-law electron distribution and compare with 
+    ; the results calculated by brm2_thintarget.
+    ;
+    ; Outputs:
+    ;   photon_spec: structure containing photon energy array (in keV) and the corresponding 
+    ;                photon fluxes (photons s^-1 keV^-1 cm^-2)
+    ;
+    ; Calling Sequence:
+    ;   example_brem_sgpl, photon_spec
+    ;
   
     eph = findgen(101)        ; Photon energies (keV)
     emin = 0.1                ; Min electron energy (keV)
@@ -40,6 +49,8 @@ Pro example_brem_sgpl
     al_legend, ['brem_nontherm','brm2_thintarget'], lines=0, thick=2, col=[0,6], box=0, $
         charsize=1.5, linsi=0.3, /right
 	
+    photon_spec = create_struct("energy_keV", eph, "photon_flux", flux)
+    
     ;stop
 	
 End
