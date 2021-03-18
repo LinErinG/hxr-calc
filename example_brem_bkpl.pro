@@ -13,7 +13,8 @@ Pro example_brem_bkpl
     eel = get_edges( exp(eel), /mean )		;Electron energies (keV)
     delta1 = 3.5               ; Electron spectral index below ebrk
     delta2 = 8.                ; Electron spectral index above ebrk
-    norm_e = 1.e5         ; Normalization factor for electron density distribution (cm^-3/keV)
+    norm_e = 1.e5         ; Normalization factor for electron density distribution 
+                          ; (equivalent to total electron density from emin to emax, cm^-3)
     n_0 = 1.e10                ; Ambient density (cm^-3)
     vol = (1.d8)^3             ; volume of source (cm^3)
     
