@@ -41,7 +41,7 @@ FUNCTION	brem_nontherm, eel, n_e, eph, n_0, vol
 	
 	for i=1, n_elements(eph)-1 do begin
 		photon_energy = eph[i]
-		brm_bremcross, eel, photon_energy+fltarr(n_elements(eel)), z, cross
+		brm_bremcross, eel, photon_energy, z, cross
 		cross = cross/mc2         ; The cross section calculated by brm_bremcross is normalized and 
 		                          ; in units of cm^2. To get a cross section in cm^2/keV, we need to
 		                          ; divide it by mc2(electron rest energy).			  
