@@ -30,14 +30,14 @@ Pro rhessi_count_spec_sim, eph, photon_flux, int_time=int_time, counting_stat=co
   Default, atten_state, 0
   Default, detectors, [1]
 
-  ; Get RHESSI effective area (note: only diagonal elements here) 
+  ; Get RHESSI effective area in cm^2 (note: only diagonal elements here) 
   bin_size = mean(get_edges(eph, /width))
   e_edges = [eph[0]-0.5*bin_size,eph+0.5*bin_size]
   ind = where(e_edges ge 1. and e_edges le 20000.)
   e_edges = e_edges(ind)
   eff_area = rhessi_eff_area2(e_edges,radial_offset_, atten_state, detectors=detectors)
   
-  ; FOXSI count spectrum (counts s^-1 keV^-1)
+  ; RHESSI count spectrum (counts s^-1 keV^-1)
   eph = eph(ind[0:-2])
   photon_flux = photon_flux(ind[0:-2])
   count_flux =  photon_flux*eff_area
@@ -62,13 +62,13 @@ Pro rhessi_count_spec_sim, eph, photon_flux, int_time=int_time, counting_stat=co
   If int_time eq 1 then ytitle_str='count flux (counts/s/keV)' $
   else ytitle_str='counts/keV (in '+strtrim(string(int_time),2)+'s)'
   title_str = 'RHESSI simulated count spectrum'
-  xrange = [1,500]
+  xrange = [1,50]
   
   set_line_color
   plot,eph,count_flux*int_time,/ylog,/xlog,/xsty,xr=xrange,color=0,background=1,chars=1.5,$
     xtitle='Energy (keV)',ytitle=ytitle_str,title=title_str,psym=10
   al_legend,['attenuator state: '+strtrim(string(round(atten_state)),2), $
-             'detectors: '+ strjoin(strtrim(string(detectors),2),' ')], /right,chars=1.2
+             'detector indices: '+ strjoin(strtrim(string(detectors),2),' ')], /left,chars=1.2
              
   ;stop
   
