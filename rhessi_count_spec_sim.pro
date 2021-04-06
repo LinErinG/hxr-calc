@@ -2,8 +2,13 @@ Pro rhessi_count_spec_sim, eph, photon_flux, int_time=int_time, counting_stat=co
         radial_offset_=radil_offset_, atten_state=atten_state, detectors=detectors
 
   ; This script is to generate simulated RHESSI count spectrum from an input photon spectrum.
-  ; Note: this is only for rough estimation - the effective area used in this routine only considers 
-  ;       photon absorbtion (i.e. no compton scattering etc); background not considered either.
+  ; 
+  ; -----------------------------------------------------------------------------------------------------
+  ; DISCLAIMER:
+  ; This routine only takes into account photon absorbtion for RHESSI instrument response (i.e. no compton
+  ; scattering etc), therefore it works only for energies below ~50 keV. Background is not considered 
+  ; either. Users should always use the full RHESSI response if they want to look at a specific event. 
+  ; ------------------------------------------------------------------------------------------------------
   ;       
   ; Inputs:
   ;   eph: array of photon energies (keV). MUST BE EVENLY SPACED.
@@ -25,7 +30,7 @@ Pro rhessi_count_spec_sim, eph, photon_flux, int_time=int_time, counting_stat=co
   Default, atten_state, 0
   Default, detectors, [1]
 
-  ; Get RHESSI effective area (note: only take into account diagonal elements here) 
+  ; Get RHESSI effective area (note: only diagonal elements here) 
   bin_size = mean(get_edges(eph, /width))
   e_edges = [eph[0]-0.5*bin_size,eph+0.5*bin_size]
   ind = where(e_edges ge 1. and e_edges le 20000.)
