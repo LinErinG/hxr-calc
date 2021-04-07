@@ -1,5 +1,8 @@
 ; rhessi_eff_area2.pro:
-; Adapted from rhessi_eff_area.pro to work for a single detector.   Y.Zhang 4/2/2021 
+; Adapted from rhessi_eff_area.pro - (only) change the return line so it could work for a single detector.   
+; Y. Zhang 4/2/2021 
+;
+; Below is the header for rhessi_eff_area.pro:
 ;+
 ; PSH, 2005/07/19
 ;
@@ -8,12 +11,12 @@
 ; Units are in cm^2 (for all 9 detectors).
 ;
 ; EXAMPLES:
-;	PRINT, rhessi_eff_area2([12,25],0.001,1)
-;	PRINT, rhessi_eff_area2([12,25],0.25,0,detector=[1,3,4,5,6,8,9],/REAR)
-;	PRINT, rhessi_eff_area2([12,25,50],0.25,0,detector=[1,3,4,5,6,8,9])
+;	PRINT, rhessi_eff_area([12,25],0.001,1)
+;	PRINT, rhessi_eff_area([12,25],0.25,0,detector=[1,3,4,5,6,8,9],/REAR)
+;	PRINT, rhessi_eff_area([12,25,50],0.25,0,detector=[1,3,4,5,6,8,9])
 ;
-;	PRINT, rhessi_eff_area2([10,11],0.25,0,detector=[8,9])
-;	PRINT, rhessi_eff_area2([10.,11],0.25,0,detector=[8,9])
+;	PRINT, rhessi_eff_area([10,11],0.25,0,detector=[8,9])
+;	PRINT, rhessi_eff_area([10.,11],0.25,0,detector=[8,9])
 ;
 ; Playing a bit with the routines, my experience is that hessi_drm_4image.pro is almost independent of which detector is being used,
 ; and that hessi_grm.pro seem completely independent of the attenuator state.
