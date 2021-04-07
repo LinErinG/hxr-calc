@@ -12,7 +12,7 @@ Pro example_brem_kappa, photon_spec
   ;   example_brem_kappa, photon_spec
   ;
 
-  eph = findgen(1000)         ; Photon energies (keV)
+  eph = findgen(1000)        ; Photon energies (keV)
   emin = 0.001               ; Min electron energy (keV)
   emax = 2.e3                ; Max electron energy
   bin= 0.01                  ; Electron energy bin (in log space)
@@ -49,6 +49,6 @@ Pro example_brem_kappa, photon_spec
 
   photon_spec = create_struct("energy_keV", eph, "photon_flux", flux)
 
-  stop
+  ;stop
 
 End
