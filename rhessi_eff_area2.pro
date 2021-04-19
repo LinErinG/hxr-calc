@@ -1,5 +1,6 @@
 ; rhessi_eff_area2.pro:
-; Adapted from rhessi_eff_area.pro - (only) change the return line so it could work for a single detector.   
+; Adapted from rhessi_eff_area.pro written by Pascal Saint-Hilaire:
+; (only) change the return line so it could work for a single detector.   
 ; Y. Zhang 4/2/2021 
 ;
 ; Below is the header for rhessi_eff_area.pro:
